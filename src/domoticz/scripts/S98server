@@ -1,0 +1,54 @@
+#!/bin/sh
+#Author: Selen Kelan <selen.kelan@gmail.com>
+
+DESC="Domoticz server"
+NAME=server
+DAEMON=/opt/domoticz/scripts/C/$NAME
+DAEMON_ARGS="-g 17"
+PIDFILE=/var/run/$NAME.pid
+SCRIPTNAME=/etc/init.d/S98$NAME
+
+start()
+{
+        # Return
+        #   0 if daemon has been started
+        #   1 if daemon  could not be started
+        # Trying to start a server on another one will thow an uncaught error
+        printf "Starting $DESC: "
+        start-stop-daemon --start --quiet --background --make-pidfile --pidfile $PIDFILE --exec $DAEMON -- \
+                $DAEMON_ARGS && echo "OK" \
+                || echo "FAIL" && return 1
+        # Add code here, if necessary, that waits for the process to be ready
+        # to handle requests from services started subsequently which depend
+        # on this one.  As a last resort, sleep for some time.
+}
+
+stop()
+{
+        # Return
+        #   0 if daemon has been started
+        #   1 if daemon  could not be started
+        # Trying to stop a server when none is running will throw an uncaught error
+        printf "Stopping $DESC: "
+        start-stop-daemon -K -q -p $PIDFILE [$? = 0] && echo "OK" \
+                || echo "FAIL" && return 1
+}
+
+restart()
+{
+        stop
+        start
+}
+
+case "$1" in
+     start)
+         start;;
+     stop)
+         stop;;
+     restart|reload)
+         restart;;
+     *)
+         echo "usage: $0 {start|stop|restart}"
+esac
+
+exit $?
