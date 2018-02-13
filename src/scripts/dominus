@@ -1,0 +1,30 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          dominus
+# Required-Start:    $all
+# Required-Stop:     $all
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start Dominus main server
+# Description:       Start Dominus main server
+### END INIT INFO
+
+# Author: Noelie Ramuzat & Rémi Rigal
+
+. /etc/profile.d/dominus.sh
+
+case $1 in
+    start)
+        echo "Starting Dominus server..."
+	mkdir $DOMINUS_PATH/logs
+        $DOMINUS_PATH/src/app/main_server 29200 18 > $DOMINUS_PATH/logs/server.log 2>&1
+        echo "Dominus server started"
+    ;;
+    *)
+        echo "Usage: /etc/init.d/dominus start"
+        exit 1
+    ;;
+esac
+
+exit 0
