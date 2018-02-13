@@ -29,4 +29,12 @@ With:
     ID_Sensor   -> The ID your sensor will have in Domoticz
 
 
+## domoticz_create_assign
+
+This program permits to create a virtual temperature sensor on domoticz.
+The convention is :
+
+	$ ./domoticz_create_assign ID_Sensor Temperature 
+
+It will create the virtual sensor with the temperature asked but not with the good id.
 
