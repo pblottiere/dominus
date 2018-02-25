@@ -1,7 +1,6 @@
 # DOMINUS - Src domoticz
 
 
-
 ## create_sensor.c
 
 This code is designed to allow users to easily add sensors to a remote domoticz server.

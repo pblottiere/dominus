@@ -6,6 +6,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([config])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AM_PROG_AR
+CC=/root/buildroot-2017.08/output/host/bin/arm-linux-gcc
 AC_PROG_CC
 AM_CONFIG_HEADER([config.h])
 
@@ -20,7 +21,10 @@ AC_CHECK_HEADER(curl/curl.h, [],
 
 # output files
 AC_CONFIG_FILES([Makefile
+                 src/app/Makefile
                  src/Makefile
+                 src/lib/gpio/Makefile
+                 src/lib/tcp/Makefile
                  src/domoticz/Makefile])
 
 AC_OUTPUT
