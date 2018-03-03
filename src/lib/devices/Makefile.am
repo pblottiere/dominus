@@ -1,3 +1,3 @@
 MAINTAINERCLEANFILES = Makefile.in
 
-SUBDIRS = lib apps
+SUBDIRS = device bme280 gpio

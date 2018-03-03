@@ -1,3 +1,3 @@
 MAINTAINERCLEANFILES = Makefile.in
 
-SUBDIRS = lib apps
+SUBDIRS = domoticz devices net

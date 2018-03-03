@@ -6,8 +6,9 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([config])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AM_PROG_AR
-CC=/root/buildroot-2017.08/output/host/bin/arm-linux-gcc
 AC_PROG_CC
+AC_PROG_CXX
+AC_LANG_PUSH([C++])
 AM_CONFIG_HEADER([config.h])
 
 # libtool init
@@ -18,14 +19,22 @@ AC_ENABLE_SHARED
 AC_CHECK_HEADER(curl/curl.h, [],
                 [AC_MSG_ERROR(["Couldn't find curl/curl.h"])])
 
+AC_CHECK_HEADERS(libconfig.h++, [],
+                 [AC_MSG_ERROR(["Couldn't find libconfig.h"])])
+
 
 # output files
 AC_CONFIG_FILES([Makefile
-                 src/app/Makefile
                  src/Makefile
-                 src/lib/gpio/Makefile
-                 src/lib/tcp/Makefile
-                 src/domoticz/Makefile])
+                 src/lib/Makefile
+                 src/lib/domoticz/Makefile
+                 src/lib/net/Makefile
+                 src/lib/devices/Makefile
+                 src/lib/devices/device/Makefile
+                 src/lib/devices/bme280/Makefile
+                 src/lib/devices/gpio/Makefile
+                 src/apps/Makefile
+                 examples/Makefile])
 
 AC_OUTPUT
 

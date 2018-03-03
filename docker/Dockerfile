@@ -13,7 +13,10 @@ RUN apt-get update && apt-get install -y \
 	ncurses-dev \
 	python \
 	unzip \
-	wget
+	wget \
+	autotools-dev \
+	automake \
+	libtool
 
 WORKDIR /root
 

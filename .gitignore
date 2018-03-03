@@ -1,0 +1,17 @@
+aclocal.m4
+*~
+Makefile
+Makefile.in
+autom4te.cache/
+config.h.in
+config/
+configure
+m4/
+config.log
+config.status
+.deps
+config.h
+stamp-h1
+libtool
+*.o
+create_sensor

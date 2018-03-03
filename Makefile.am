@@ -7,4 +7,4 @@ maintainer-clean-local:
 	-rm -rf config
 	-rm -r m4
 
-SUBDIRS = src
+SUBDIRS = src examples

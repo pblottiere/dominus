@@ -4,20 +4,27 @@
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
-#include "gpio_switch.h"
 
+#include "gpio.hpp"
 
-int initGPIO(char* gpioId) {
-    int exportFile;
-    if ((exportFile = open("/sys/class/gpio/export", O_WRONLY)) < 0){
-        return EXIT_FAILURE;
+GPIO::GPIO( const int id, const int port )
+    : Device( Device::GPIO, id )
+    , _port( port )
+{
+    /*int exportFile;
+    if ((exportFile = open("/sys/class/gpio/export", O_WRONLY)) >= 0)
+    {
+        write(exportFile, gpioId, strlen(gpioId));
+        close(exportFile);
+        _valid = true;
     }
-    write(exportFile, gpioId, strlen(gpioId));
-    close(exportFile);
-    return EXIT_SUCCESS;
+    else
+    {
+        _valid = false;
+    }*/
 }
 
-int setGPIODirection(char* gpioId, char* direction) {
+/*int setGPIODirection(char* gpioId, char* direction) {
     char directionPath[256];
     sprintf(directionPath, "/sys/class/gpio/gpio%s/direction", gpioId);
     int directionFile;
@@ -57,8 +64,8 @@ int main (int argc, char* argv[]){
             }
             if (setGPIOValue(argv[1], argv[2]) == EXIT_FAILURE) {
                return EXIT_FAILURE;
-            }         
+            }
         }
         return EXIT_SUCCESS;
     }
-}
+}*/
