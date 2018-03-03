@@ -1,4 +1,13 @@
-language: c
+sudo: required
+
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y libconfig++-dev
+
+language: cpp
+
+compiler:
+  - gcc
 
 before_script:
   - ./autogen.sh
@@ -8,5 +17,5 @@ script:
   - make
 
 notifications:
-    on_success: never
-    on_failure: never
+  on_success: never
+  on_failure: never

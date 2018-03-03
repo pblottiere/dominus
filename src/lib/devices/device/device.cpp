@@ -6,6 +6,10 @@ Device::Device( const Type type, const int id)
 {
 };
 
+Device::~Device()
+{
+}
+
 Device::Type Device::type() const
 {
   return _type;

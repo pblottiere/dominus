@@ -14,7 +14,7 @@ class Device
     };
 
     Device( Type type, const int id );
-    virtual ~Device() = default;
+    virtual ~Device();
 
     Type type() const;
 

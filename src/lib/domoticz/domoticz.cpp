@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <iostream>
+#include <stdlib.h>
 
 #include "domoticz.hpp"
 

@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <ifaddrs.h>
 #include <iostream>
+#include <stdlib.h>
 #include <devices/bme280/bme280.hpp>
 
 Config::Config()

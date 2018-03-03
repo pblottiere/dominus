@@ -1,5 +1,9 @@
 aclocal.m4
 *~
+*.lo
+*.la
+.libs
+src/apps/dominus
 Makefile
 Makefile.in
 autom4te.cache/

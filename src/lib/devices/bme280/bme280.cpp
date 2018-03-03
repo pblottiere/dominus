@@ -2,6 +2,7 @@
 #include <linux/i2c-dev.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
+#include <cstdio>
 #include <iostream>
 
 #include "bme280.hpp"
