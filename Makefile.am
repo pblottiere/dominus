@@ -5,6 +5,6 @@ ACLOCAL_AMFLAGS = -I m4
 
 maintainer-clean-local:
 	-rm -rf config
-	-rm -r m4
+	-cd m4 && find * | grep -v "ax_cxx_compile_stdcxx.*"| xargs rm
 
 SUBDIRS = src examples
