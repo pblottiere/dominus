@@ -1,5 +1,6 @@
 FROM debian:stable
 
+# Buildroot deps
 RUN apt-get update && apt-get install -y \
 	bc \
 	bzip2 \
@@ -32,6 +33,8 @@ RUN git config --global http.postBuffer 1048576000
 RUN make dominus_defconfig
 RUN make
 
-RUN cd output && tar zcvf images.tar.gz images
+ENV PATH="/root/buildroot-2017.08/output/host/bin:${PATH}"
+
+RUN mkdir /src
 
 CMD ["/bin/bash"]
