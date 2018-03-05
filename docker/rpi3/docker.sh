@@ -29,6 +29,10 @@ case "$1" in
     docker run --rm -v $PWD/../..:/src -w /src -it $(id) make maintainer-clean
   ;;
 
+  connect)
+    docker run --rm -v $PWD/../..:/src -w /src -it $(id) /bin/bash
+  ;;
+
   clean)
     docker rmi $(id)
   ;;
