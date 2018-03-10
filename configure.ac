@@ -34,8 +34,9 @@ AC_CONFIG_FILES([Makefile
                  src/lib/devices/device/Makefile
                  src/lib/devices/bme280/Makefile
                  src/lib/devices/gpio/Makefile
-                 src/apps/server/Makefile
                  src/apps/Makefile
+                 src/apps/server/Makefile
+                 src/apps/client/Makefile
                  examples/Makefile])
 
 AC_OUTPUT
