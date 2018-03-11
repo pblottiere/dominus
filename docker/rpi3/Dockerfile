@@ -19,6 +19,10 @@ RUN apt-get update && apt-get install -y \
 	automake \
 	libtool
 
+# QEMU deps
+RUN apt-get install -y \
+	qemu-user-static
+
 WORKDIR /root
 
 RUN wget https://buildroot.org/downloads/buildroot-2017.08.tar.gz
