@@ -9,6 +9,8 @@
 #include <arpa/inet.h>
 #include <iostream>
 
+#include <logger/logger.hpp>
+
 #include "client.hpp"
 
 Client::Client( const std::string &ip, const int port )
@@ -16,6 +18,9 @@ Client::Client( const std::string &ip, const int port )
     , _ip( ip )
     , _socket( -1 )
 {
+    Logger::debug( "[client] Configuration:" );
+    Logger::debug( "[client]   - ip: " + ip );
+    Logger::debug( "[client]   - port: " + std::to_string( port ) );
 }
 
 bool Client::connect()

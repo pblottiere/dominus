@@ -30,6 +30,7 @@ AC_CONFIG_FILES([Makefile
                  src/lib/Makefile
                  src/lib/domoticz/Makefile
                  src/lib/net/Makefile
+                 src/lib/logger/Makefile
                  src/lib/devices/Makefile
                  src/lib/devices/device/Makefile
                  src/lib/devices/bme280/Makefile

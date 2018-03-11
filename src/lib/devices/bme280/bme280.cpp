@@ -2,8 +2,11 @@
 #include <linux/i2c-dev.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
+
 #include <cstdio>
 #include <iostream>
+
+#include <logger/logger.hpp>
 
 #include "bme280.hpp"
 
@@ -12,6 +15,9 @@ BME280::BME280( const int id, const std::string &port )
   , _port( port )
   , _address( 0x77 )
 {
+  Logger::debug("[bme280] Configuration:");
+  Logger::debug("[bme280]   - id: " + std::to_string( id ));
+  Logger::debug("[bme280]   - port: " + port);
 }
 
 std::string BME280::port() const
@@ -19,11 +25,13 @@ std::string BME280::port() const
   return _port;
 }
 
-Data::THP BME280::get() const
+bool BME280::get( Data::THP &thp ) const
 {
   // https://github.com/ControlEverythingCommunity/BME280
+  //
+  Logger::debug("[bme280] Reading data...");
 
-  Data::THP thp = {-1, -1, -1};
+  thp = {-1, -1, -1};
 
   // open fd descriptor
   int fd;
@@ -32,8 +40,8 @@ Data::THP BME280::get() const
 
   if((fd = open(bus, O_RDWR)) < 0)
   {
-    std::cerr << "Failed to open the bus." << std::endl;
-    return thp;
+    Logger::error( "[bme280] Failed to open the bus." );
+    return true;
   }
 
   // get I2C device
@@ -46,8 +54,8 @@ Data::THP BME280::get() const
 
   if(read(fd, b1, 24) != 24)
   {
-    std::cerr << "Error : Input/Output error" << std::endl;
-    return thp;
+    Logger::error( "[bme280] Input/Output error." );
+    return true;
   }
 
   // temperature coefficients
@@ -209,5 +217,5 @@ Data::THP BME280::get() const
   thp.pressure = pressure;
   thp.temperature = cTemp;
 
-  return thp;
+  return false;
 }

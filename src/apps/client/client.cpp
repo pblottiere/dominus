@@ -3,8 +3,12 @@
 #include <unistd.h>
 #include <iostream>
 
+#include <logger/logger.hpp>
+
 int main( int argc, char * argv[] )
 {
+  Logger::debug( "[dominus-client] Starting Dominus client." );
+
   std::string host;
   std::string command;
   int port;
@@ -33,4 +37,6 @@ int main( int argc, char * argv[] )
   client.connect();
   client.send( command );
   client.close();
+
+  return EXIT_SUCCESS;
 }

@@ -3,9 +3,12 @@
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <netdb.h>
-#include <iostream>
 #include <sys/socket.h>
 #include <sys/types.h>
+
+#include <iostream>
+
+#include <logger/logger.hpp>
 
 #include "server.hpp"
 
@@ -13,14 +16,16 @@ Server::Server( const int port )
     : _port( port )
     , _socket( -1 )
 {
+    Logger::debug( "[server] Configuration:" );
+    Logger::debug( "[server]   - port: " + std::to_string( port ) );
 }
 
 bool Server::bind()
 {
     if ((_socket = socket(AF_INET, SOCK_STREAM, 0)) == -1)
     {
-        std::cerr << "Socket RV failure" << std::endl;
-        return false;
+        Logger::error( "[server] Socket failure." );
+        return true;
     }
 
     _sockaddr.sin_family = AF_INET;
@@ -29,14 +34,14 @@ bool Server::bind()
 
     if (::bind(_socket, (struct sockaddr *) &_sockaddr, sizeof(_sockaddr))==-1)
     {
-        std::cerr << "Binding failure" << std::endl;
-        return false;
+        Logger::error( "[server] Binding failure." );
+        return true;
     }
 
     if (listen(_socket, 1)==-1)
     {
-        std::cerr << "Listening failure" << std::endl;
-        return false;
+        Logger::error( "[server] Listening failure." );
+        return true;
     }
 
     // prepare set of file descriptors
@@ -45,7 +50,7 @@ bool Server::bind()
     FD_ZERO (&_active_set);
     FD_SET (_socket, &_active_set);
 
-    return true;
+    return false;
 }
 
 bool Server::wait( const int secs, std::string &message )
@@ -59,8 +64,8 @@ bool Server::wait( const int secs, std::string &message )
 
     if (select (_socket+1, &_read_set, NULL, NULL, &timeout) < 0)
     {
-        std::cerr << "select" << std::endl;
-        return EXIT_FAILURE;
+        Logger::error( "[server] Select failure" );
+        return true;
     }
 
     if (FD_ISSET (_socket, &_read_set))
@@ -72,8 +77,8 @@ bool Server::wait( const int secs, std::string &message )
 
         if( (nbytes = read(s, buf , BUFSIZ)) < 0)
         {
-            std::cerr << "recv failure" << std::endl;
-            return false;
+            Logger::error( "[server] Read failure" );
+            return true;
         }
 
         message = buf;
@@ -82,5 +87,5 @@ bool Server::wait( const int secs, std::string &message )
         close(s);
     }
 
-    return EXIT_SUCCESS;
+    return false;
 }

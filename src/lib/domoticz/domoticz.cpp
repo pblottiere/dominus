@@ -1,6 +1,9 @@
+#include <stdlib.h>
+
 #include <cstdio>
 #include <iostream>
-#include <stdlib.h>
+
+#include <logger/logger.hpp>
 
 #include "domoticz.hpp"
 
@@ -8,6 +11,9 @@ Domoticz::Domoticz( const std::string &host, const int port )
   : _host( host )
   , _port( port )
 {
+  Logger::debug( "[domoticz] Configuration:" );
+  Logger::debug( "[domoticz]   - host: " + _host );
+  Logger::debug( "[domoticz]   - port: " + std::to_string(_port) );
 }
 
 bool Domoticz::update_temp_hum( const int device, const float temp,
@@ -46,7 +52,7 @@ bool Domoticz::send( const std::string &data )
   curl_global_init(CURL_GLOBAL_ALL);
   CURL *curl = curl_easy_init();
 
-  std::cout << message << std::endl;
+  Logger::debug( "[domoticz] Send '" + std::string(message) + "'." );
 
   if ( curl )
   {
@@ -55,9 +61,9 @@ bool Domoticz::send( const std::string &data )
 
     if(res != CURLE_OK)
     {
-      fprintf(stderr, "curl_easy_perform() failed: %s (%s)\n",
-          curl_easy_strerror(res), message);
-      return EXIT_FAILURE;
+      const std::string errmsg = "curl_easy_perform() failed: " + std::string(curl_easy_strerror(res)) + "(" + message + ")";
+      Logger::error( errmsg );
+      return true;
     }
 
     curl_easy_cleanup(curl);
@@ -65,9 +71,9 @@ bool Domoticz::send( const std::string &data )
   else
   {
     curl_global_cleanup();
-    fprintf(stderr, "Failed to init CURL");
-    return EXIT_FAILURE;
+    Logger::error( "Failed to init CURL." );
+    return true;
   }
 
-  return EXIT_SUCCESS;
+  return false;
 }

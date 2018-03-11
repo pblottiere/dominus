@@ -1,3 +1,3 @@
 MAINTAINERCLEANFILES = Makefile.in
 
-SUBDIRS = domoticz devices net
+SUBDIRS = logger domoticz devices net

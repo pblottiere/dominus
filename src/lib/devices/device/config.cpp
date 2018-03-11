@@ -6,7 +6,9 @@
 #include <ifaddrs.h>
 #include <iostream>
 #include <stdlib.h>
+#include <sstream>
 #include <devices/bme280/bme280.hpp>
+#include <logger/logger.hpp>
 
 Config::Config()
 {
@@ -43,20 +45,15 @@ int Config::interval() const
   return _interval;
 }
 
-void Config::summary() const
+std::string Config::interface() const
 {
-  std::cout << "Dominus:" << std::endl;
-  std::cout << "  - " << _name << std::endl;
-  std::cout << "  - " << _net_if << std::endl;
-  std::cout << "  - " << _port << std::endl;
-  std::cout << "  - " << _interval << std::endl;
-  std::cout << "Domoticz:" << std::endl;
-  std::cout << "  - " << _domoticz_host << std::endl;
-  std::cout << "  - " << _domoticz_port << std::endl;
+  return _net_if;
 }
 
 bool Config::read( const std::string &filename )
 {
+  Logger::debug("[config] Reading configuration file '" + filename + "'");
+
   init();
 
   libconfig::Config cfg;
@@ -68,14 +65,16 @@ bool Config::read( const std::string &filename )
   }
   catch(const libconfig::FileIOException &fioex)
   {
-    std::cerr << "I/O error while reading file." << std::endl;
-    return(EXIT_FAILURE);
+    Logger::error( "[config] I/O error while reading file.");
+    return true;
   }
   catch(const libconfig::ParseException &pex)
   {
-    std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine()
-              << " - " << pex.getError() << std::endl;
-    return EXIT_FAILURE;
+    std::stringstream ss;
+    ss << "Parse error at " << std::string(pex.getFile()) << ":";
+    ss << pex.getLine() << " - " << std::string(pex.getError());
+    Logger::error( ss.str() );
+    return true;
   }
 
   // get mandatory parameters
@@ -88,8 +87,8 @@ bool Config::read( const std::string &filename )
   }
   catch(const libconfig::SettingNotFoundException &nfex)
   {
-    std::cerr << "A mandatory parameter is lacking." << std::endl;
-    return EXIT_FAILURE;
+    Logger::error( "[config] A mandatory parameter is lacking." );
+    return true;
   }
 
   // get devices
@@ -104,8 +103,8 @@ bool Config::read( const std::string &filename )
   }
   catch(const libconfig::SettingNotFoundException &nfex)
   {
-    std::cerr << "Failed to read domoticz configuration." << std::endl;
-    return EXIT_FAILURE;
+    Logger::error( "[config] Failed to read domoticz configuration." );
+    return true;
   }
 
   try
@@ -135,11 +134,11 @@ bool Config::read( const std::string &filename )
   }
   catch(const libconfig::SettingNotFoundException &nfex)
   {
-    std::cerr << "Failed to read devices configuration." << std::endl;
-    return EXIT_FAILURE;
+    Logger::error( "Failed to read devices configuration." );
+    return true;
   }
 
-  return EXIT_SUCCESS;
+  return false;
 }
 
 void Config::init()
@@ -170,4 +169,6 @@ std::string Config::ip() const
   }
 
   freeifaddrs(ifap);
+
+  return ip;
 }

@@ -22,13 +22,14 @@ class Config
 
     int interval() const;
 
+    std::string interface() const;
+
     std::list<Device*> devices() const;
 
-    void summary() const;
+    std::string ip() const;
 
   private:
     void init();
-    std::string ip() const;
 
     int _port;
     int _interval;
