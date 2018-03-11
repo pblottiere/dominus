@@ -7,13 +7,22 @@
 #include <unistd.h>
 #include <iostream>
 
+void usage()
+{
+  std::cout << "Usage: dominus-server [OPTIONS]" << std::endl;
+  std::cout << std::endl;
+  std::cout << "Options:" << std::endl;
+  std::cout << std::endl;
+  std::cout << "  -c=dominus.cfg        Configuration file" << std::endl;
+  std::cout << "  -h                    Help" << std::endl;
+}
+
 int main( int argc, char * argv[] )
 {
-  Logger::debug( "[dominus-server] Starting Dominus server." );
   std::string filename;
   char c;
 
-  while( ( c = getopt (argc, argv, "c:") ) != -1 )
+  while( ( c = getopt (argc, argv, "c:h") ) != -1 )
   {
     switch(c)
     {
@@ -21,8 +30,24 @@ int main( int argc, char * argv[] )
         if(optarg)
           filename = optarg;
         break;
+
+      case 'h':
+        usage();
+        return EXIT_SUCCESS;
+
+      default:
+        std::cerr << "Invalid usage. See -h for help." << std::endl;
+        return EXIT_FAILURE;
     }
   }
+
+  if ( filename.empty() )
+  {
+    usage();
+    return EXIT_FAILURE;
+  }
+
+  Logger::debug( "[dominus-server] Starting Dominus server." );
 
   Config config;
 
