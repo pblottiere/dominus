@@ -32,6 +32,7 @@ WORKDIR /root/buildroot-2017.08
 
 COPY users.tables /root/buildroot-2017.08/users.tables
 COPY defconfig /root/buildroot-2017.08/configs/dominus_defconfig
+COPY busybox.config /root/buildroot-2017.08/dominus_busybox.config
 
 RUN git config --global http.postBuffer 1048576000
 RUN make dominus_defconfig
