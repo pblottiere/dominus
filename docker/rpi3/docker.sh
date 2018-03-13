@@ -5,8 +5,11 @@ ROOTFS="/root/buildroot-2017.08/output/images/rootfs.tar"
 QEMU_DIR="/tmp/dominus-qemu"
 QEMU_CMD="mkdir -p $QEMU_DIR/usr/bin; \
 	  mkdir -p $QEMU_DIR/usr/lib; \
+	  mkdir -p $QEMU_DIR/etc; \
 	  cp -r /src/install/bin/* $QEMU_DIR/usr/bin/; \
 	  cp -r /src/install/lib/* $QEMU_DIR/usr/lib/; \
+	  cp -r /src/install/etc/* $QEMU_DIR/etc/; \
+	  chmod a+x $QEMU_DIR/etc/init.d/S101dominus; \
 	  ./scripts/qemu_up.sh $ROOTFS $QEMU_DIR"
 
 id() {

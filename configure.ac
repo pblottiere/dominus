@@ -26,6 +26,7 @@ AC_CHECK_HEADERS(libconfig.h++, [],
 
 # output files
 AC_CONFIG_FILES([Makefile
+                 scripts/Makefile
                  src/Makefile
                  src/lib/Makefile
                  src/lib/domoticz/Makefile
