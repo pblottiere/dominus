@@ -21,8 +21,9 @@ int main( int argc, char * argv[] )
 {
   std::string filename;
   char c;
+  bool done = false;
 
-  while( ( c = getopt (argc, argv, "c:h") ) != -1 )
+  while( !done && ( c = getopt (argc, argv, "c:h") ) != -1 )
   {
     switch(c)
     {
@@ -36,8 +37,8 @@ int main( int argc, char * argv[] )
         return EXIT_SUCCESS;
 
       default:
-        std::cerr << "Invalid usage. See -h for help." << std::endl;
-        return EXIT_FAILURE;
+        done = true;
+        break;
     }
   }
 
