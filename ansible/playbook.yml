@@ -1,0 +1,75 @@
+- hosts: all
+  become: no
+  gather_facts: False
+
+  vars:
+    installdir: "../install"
+    syslog_server: "192.168.1.30"
+    user: "root"
+    password: "root1*"
+    version: "0.0.0"
+    ssh: "sshpass -p '{{password}}' ssh"
+    scp: "sshpass -p '{{password}}' scp"
+
+  tasks:
+    - name: Copy init.d script
+      local_action: >
+        command
+        {{scp}} ../scripts/S101dominus {{user}}@{{inventory_hostname}}:/etc/init.d/
+
+    - name: Copy syslog configuration file
+      local_action: >
+        command
+        {{scp}} ../scripts/syslog.conf {{user}}@{{inventory_hostname}}:/etc/
+
+    - name: Creates default directory
+      local_action: >
+        command
+        {{ssh}} {{user}}@{{inventory_hostname}} 'mkdir -p /etc/default'
+
+    - name: Copy syslogd options file
+      local_action: >
+        command
+        {{scp}} ../scripts/logging {{user}}@{{inventory_hostname}}:/etc/default/logging
+
+    - name: Copy profile file
+      local_action: >
+        command
+        {{scp}} ../scripts/profile.sh {{user}}@{{inventory_hostname}}:/etc/profile.d/dominus.sh
+
+    - name: Copy configuration file
+      local_action: >
+        command
+        {{scp}} ../scripts/dominus.cfg {{user}}@{{inventory_hostname}}:/etc/dominus.cfg
+
+    - name: Creates lib subdirectory
+      local_action: >
+        command
+        {{ssh}} {{user}}@{{inventory_hostname}} 'mkdir -p /usr/lib/dominus'
+
+    - name: Copy libs
+      local_action: >
+        command
+        {{scp}} {{installdir}}/lib/dominus/{{item}}.so.{{version}} {{user}}@{{inventory_hostname}}:/usr/lib/dominus/
+      with_items:
+        - libbme280
+        - libgpio
+        - libdevice
+        - libdomoticz
+        - liblogger
+        - libnet
+
+    - name: Update ldconfig for dominus libs
+      local_action: >
+        command
+        {{ssh}} {{user}}@{{inventory_hostname}} 'ldconfig /usr/lib/dominus'
+
+    - name: Copy client
+      local_action: >
+        command
+        {{scp}} {{installdir}}/bin/dominus-client {{user}}@{{inventory_hostname}}:/usr/bin/
+
+    - name: Copy server
+      local_action: >
+        command
+        {{scp}} {{installdir}}/bin/dominus-server {{user}}@{{inventory_hostname}}:/usr/bin/

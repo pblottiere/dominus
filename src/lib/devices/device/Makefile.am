@@ -1,6 +1,8 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+include $(top_srcdir)/common.mk
+
 AM_CPPFLAGS = -I$(top_srcdir)/src/lib/
 
-lib_LTLIBRARIES = libdevice.la
+dominuslib_LTLIBRARIES = libdevice.la
 libdevice_la_SOURCES = device.cpp config.cpp

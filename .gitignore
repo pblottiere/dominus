@@ -1,4 +1,6 @@
 aclocal.m4
+venv
+playbook.retry
 *~
 install
 *.lo

@@ -23,7 +23,6 @@ AC_CHECK_HEADER(curl/curl.h, [],
 AC_CHECK_HEADERS(libconfig.h++, [],
                  [AC_MSG_ERROR(["Couldn't find libconfig.h"])])
 
-
 # output files
 AC_CONFIG_FILES([Makefile
                  scripts/Makefile
@@ -52,7 +51,7 @@ AC_MSG_NOTICE([
  prefix:            $prefix
  exec-prefix:       $exec_prefix
  bin path:          $bindir
- lib path:          $libdir
+ lib path:          $libdir/dominus
  include path:      $includedir
  etc path:          $sysconfdir
  data path:         $datarootdir

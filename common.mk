@@ -1,0 +1,1 @@
+dominuslibdir=$(libdir)/dominus
