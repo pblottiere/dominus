@@ -14,6 +14,7 @@ BME280::BME280( const int id, const std::string &port )
   : Device( Device::BME280, id )
   , _port( port )
   , _address( 0x77 )
+  , _temp_calib_value( 0.0 )
 {
   Logger::debug("[bme280] Configuration:");
   Logger::debug("[bme280]   - id: " + std::to_string( id ));
@@ -23,6 +24,11 @@ BME280::BME280( const int id, const std::string &port )
 std::string BME280::port() const
 {
   return _port;
+}
+
+void BME280::setCalibrationValueTemperature( const float calib_value )
+{
+  _temp_calib_value = calib_value;
 }
 
 bool BME280::get( Data::THP &thp ) const
@@ -216,7 +222,13 @@ bool BME280::get( Data::THP &thp ) const
 
   thp.humidity = humidity;
   thp.pressure = pressure;
-  thp.temperature = cTemp;
+  thp.temperature = cTemp + _temp_calib_value;
+
+  if ( _temp_calib_value != 0.0 )
+  {
+    const std::string msg = "[bme280] Calibrate temperature: " + std::to_string(cTemp) + " -> " + std::to_string(thp.temperature);
+    Logger::debug(msg);
+  }
 
   close(fd);
 

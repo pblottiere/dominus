@@ -127,6 +127,12 @@ bool Config::read( const std::string &filename )
           std::string i2c_port;
           dev.lookupValue("port", i2c_port);
           BME280 *bme280 = new BME280( dev_id, i2c_port );
+
+          float temp_calib_value = 0.0;
+          dev.lookupValue("temp_calib_value", temp_calib_value);
+          Logger::debug(std::to_string(temp_calib_value));
+          bme280->setCalibrationValueTemperature( temp_calib_value );
+
           _devices.push_front( bme280 );
           break;
       }

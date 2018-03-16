@@ -12,11 +12,14 @@ class BME280 : public Device
     // example: "i2c-1" to read "/dev/i2c-1"
     std::string port() const;
 
+    void setCalibrationValueTemperature( const float calib_value );
+
     bool get( Data::THP &thp ) const;
 
   private:
     const std::string _port;
     const char _address;
+    float _temp_calib_value;
 };
 
 #endif
