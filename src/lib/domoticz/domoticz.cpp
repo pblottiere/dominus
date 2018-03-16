@@ -57,11 +57,12 @@ bool Domoticz::send( const std::string &data )
   if ( curl )
   {
     curl_easy_setopt(curl, CURLOPT_URL, message);
+    curl_easy_setopt(curl, CURLOPT_NOBODY, 1);
     res = curl_easy_perform(curl);
 
     if(res != CURLE_OK)
     {
-      const std::string errmsg = "curl_easy_perform() failed: " + std::string(curl_easy_strerror(res)) + "(" + message + ")";
+      const std::string errmsg = "[domoticz] curl_easy_perform() failed: " + std::string(curl_easy_strerror(res)) + "(" + message + ")";
       Logger::error( errmsg );
       return true;
     }
