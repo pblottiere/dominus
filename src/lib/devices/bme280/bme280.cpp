@@ -55,6 +55,7 @@ bool BME280::get( Data::THP &thp ) const
   if(read(fd, b1, 24) != 24)
   {
     Logger::error( "[bme280] Input/Output error." );
+    close(fd);
     return true;
   }
 
@@ -216,6 +217,8 @@ bool BME280::get( Data::THP &thp ) const
   thp.humidity = humidity;
   thp.pressure = pressure;
   thp.temperature = cTemp;
+
+  close(fd);
 
   return false;
 }
