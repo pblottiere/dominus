@@ -15,7 +15,9 @@
 case $1 in
     start)
         echo "Starting Dominus Server..."
-        dominus-server -c /etc/dominus.cfg & > /dev/null 2>&1
+        modprobe i2c-dev
+        modprobe i2c-bcm2835
+        LD_LIBRARY_PATH=/usr/lib/dominus dominus-server -c /etc/dominus.cfg & > /dev/null 2>&1
         echo "Dominus Server started"
     ;;
 
