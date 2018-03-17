@@ -1,82 +1,159 @@
+[![Build Status](https://secure.travis-ci.org/pblottiere/dominus.png)]
+(http://travis-ci.org/pblottiere/dominus)
+
+
 # DOMINUS
 
-The aim of this project is to create nearly from scratch our own operating system and to use it on a raspberry pi to exectute some simple tasks. 
-Here the task consits on switching a LED on/off when clicking on a domoticz switch, by the use of a relay.
-To do so, TCP client and server are implemented, domoticz is the client and the raspberry is the server, waiting for commands.  
-Morever in a final step the domoticz client runs on a second raspberry pi and the two raspberry pis are communicating together. 
+Dominus is a **low cost home automation system** providing:
+
+- **Autotools** to build the application
+- a **Dockerfile** to build the RPI3 BSP and cross-compile the application
+- a support for **various sensors**
+- a logger based on **syslog** to have a remote access to the current status
+- an interface to interact with **Domoticz**
+- an **Ansible playbook** to remotely deploy Dominus on boards
+- an easy way to build your own automation system **without a single line of code!**
+
+But watch out, Dominus will become the master of your own house!
+
+
+## Getting the project
+
+To clone the project from github:
+
+```shell
+$ git clone https://github.com/pblottiere/dominus
+```
+
+## BSP
+
+A Dockerfile is provided to build the BSP for the RPI3 as well as a *docker.sh*
+script allowing to simplify the workflow:
+
+```shell
+$ cd dominus/docker/rpi3
+$ ./docker.sh
+Usage: docker.sh [OPTIONS]:
+
+Options:
+
+  img                 Copy the sdcard image from the container to the host
+  build               Build the BSP in a Docker image
+  clean               Remove the underlying Docker image
+  connect             Create an interactive bash within a Docker container
+  configure           Run the configure script using the cross-compiler
+  install             Install cross-compiled application in a sub-directory
+  maintainer-clean    Clean generated files
+  make                Cross-compile the application
+  qemu                Run QEMU with the built in RFS
+```
+
+To compile the BSP for the RPI3 board:
+
+```shell
+$ ./docker.sh build
+```
+
+Then you can retrieve the BSP and flash your sdcard with the image:
+
+```shell
+$ ./docker.sh img
+Image: sdcard.img
+$ dd if=sdcard.img of=/dev/sdX
+```
+
+Now, you may boot your board and establish an ssh connection:
+
+```shell
+$ ssh dominus@<BOARD_IP> # password: dominus1*
+```
+
+Moreover, Domoticz should be available through your web-browser on
+`http://<BOARD_IP>:8080`.
+
+## Cross-compilation
+
+To compile Dominus libraries and binaries with the native compiler of your host
+machine:
+
+``` shell
+$ ./autogen.sh
+$ ./configure --prefix=$PWD/install
+$ make
+$ make install
+```
+
+If you want to use a cross-compiler, you have to use the *--host* option. For
+example with the *arm-linux-gcc* compiler:
+
+``` shell
+$ ./autogen.#!/bin/sh
+$ ./configure --prefix=$PWD/install --host=arm-linux
+$ make
+```
+
+If you're using the BSP embedded in the Docker image, you can directly
+cross-compile the application thanks to the *docker.sh* script:
+
+```shell
+$ cd docker/rpi3
+$ ./docker.sh configure
+$ ./docker make
+$ ./docker install
+$ file ../../install/bin/dominus-server
+ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV), dynamically linked,
+interpreter /lib/ld-uClibc.so.0, not stripped
+```
+
+
+## Deployment
+
+Once the application is cross-compiled and the board is online, we can use
+an Ansible playbook to deploy Dominus on the board. But a ssh connection is
+needed for the *root* user.
+
+So, you have to update the *sshd* configuration file `/etc/ssh/sshd_config`
+directly on the board:
+
+```shell
+PermitRootLogin yes #prohibit-password
+```
+
+Then you should update the `~/.ssh/config` file on the host machine:
+
+```shell
+Host dominus
+    Hostname <BOARD_IP>
+    User root
+```
+
+Finally, you're able to remotely deploy Dominus on the board:
+
+```shell
+$ cd Ansible
+$ ./deploy.sh
+Copy libs ------------------------------------------------------------------------------ 2.66s
+Copy init.d script --------------------------------------------------------------------- 0.51s
+Update ldconfig for dominus libs ------------------------------------------------------- 0.49s
+Copy client ---------------------------------------------------------------------------- 0.46s
+Copy server ---------------------------------------------------------------------------- 0.45s
+Creates lib subdirectory --------------------------------------------------------------- 0.40s
+Copy syslog configuration file --------------------------------------------------------- 0.38s
+Copy configuration file ---------------------------------------------------------------- 0.33s
+Copy syslogd options file -------------------------------------------------------------- 0.33s
+Creates default directory -------------------------------------------------------------- 0.33s
+Copy profile file ---------------------------------------------------------------------- 0.32s
+```
+
+Then you just have to reboot your board and Dominus is operational! And do not
+forget to reset the ssh access for the *root* user.
 
 ## Configuration
 
-### Startup scripts
+### Dominus
 
-The `dominus` file must be placed as is in the `/etc/init.d` directory.  
-The `dominus.sh` file must be completed with the absolute path of the root of the Dominus folder and then placed into the `/etc/profile.d` directory.
+TODO
 
-The following command must be executed in a shell:
+### Device Tree Blob
 
-		sudo update-rc.d dominus defaults 80
-
-Then reboot the system, the server is operational!
-
-
-### Domoticz scripts
-
-The scripts `switch_on.sh` and `switch_off.sh` must be bind with a virtual switch from Domoticz. Therefore they must be placed into the `Domoticz/scripts` directory.
-
-
-## Src
-
-This folder contains the sources for the project. Here are the different folders :
-
-* app contains the main programs which start the application
-
-* domoticz contains the example `create_sensor` which create a virtual sensor on domoticz
-
-* lib contains the following libraries :
-    * gpio which contains the `gpio_switch` library for the creation and control of the gpios
-    * tcp which contains the `tcp_server` and `tcp_client` for the communication between domoticz and the raspberry pi
-
-* scripts contains the following shells :
-    * `switch_off` and `switch_on` which calls the gpio_switch library to control the LED
-    * `dominus` that must be placed into the `/etc/init.d` directory which starts all the project
-    * `dominus.sh` that must be placed into the `/etc/profile.d` directory to initialize the environment variables
-
-
-## Relay's Implementation  
-
-Here is the relay schematics of the connections to the raspberry pi. 
-Source: <http://osoyoo.com/2017/06/28/raspberry-pi-relay-led/>
-
-<p align="center">
-  <img src="https://github.com/RemiRigal/dominus/blob/PCMR/img/relay_schematics.png" width="700" title="Relay connections schema">
-</p>
-
-
-## Docker
-
-This file allows you to create an image based on a debian image, and that automatically download and compile the buildroot for the RPi3.
-
-This image includes :
-* A root session which password is `toor`
-* A user session which name is `user_1` and password `user_1pw`
-* Domoticz is installed and automatically starts when the RPi3 boots.
-
-In order to creates this docker, you just have to run this command line where the .dockerfile is :
-
-		docker build .
-
-You can give the image a name with the `-t` option.
-
-NB : The whole running of this command took me about 40 minutes. It works (and have been tested) with a stable internet connexion (there are not the settings for the ENSTA's proxy, and it doesn't work with the unstable wifi connexion of the school).
-
-
-The ID of the image is returned at the end of the running of the build command. Otherwise, you can find it by running this command :
-
-		docker image ls
-
-After that, you can create a docker container from the image by running :
-
-		docker run -it <image_ID> 
-
-The image for the sdcard can be found in `/root/buildroot-2017.08/outputs/image`. 
-You can also copy it by running :
+TODO
