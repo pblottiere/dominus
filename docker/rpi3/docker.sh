@@ -22,6 +22,14 @@ case "$1" in
     docker build . -t $IMAGE
   ;;
 
+  img)
+    docker run -d -v $PWD/../..:/src -w /src --name dominus-bsp -it $(id) /bin/bash > /dev/null 2>&1
+    docker cp dominus-bsp:/root/buildroot-2017.08/output/images/sdcard.img .
+    docker stop dominus-bsp > /dev/null 2>&1
+    docker rm dominus-bsp > /dev/null 2>&1
+    echo "Image: sdcard.img"
+  ;;
+
   configure)
     docker run --rm -v $PWD/../..:/src -w /src -it $(id) ./autogen.sh
     docker run --rm -v $PWD/../..:/src -w /src -it $(id) ./configure --host=arm-linux --prefix=/src/install
@@ -49,6 +57,22 @@ case "$1" in
 
   clean)
     docker rmi $(id)
+  ;;
+
+  *)
+    echo "Usage: docker.sh [OPTIONS]:"
+    echo ""
+    echo "Options:"
+    echo ""
+    echo "  img                 Copy the sdcard image from the container to the host"
+    echo "  build               Build the BSP in a Docker image"
+    echo "  clean               Remove the underlying Docker image"
+    echo "  connect             Create an interactive bash within a Docker container"
+    echo "  configure           Run the configure script using the cross-compiler"
+    echo "  install             Install cross-compiled application in a sub-directory"
+    echo "  maintainer-clean    Clean generated files"
+    echo "  make                Cross-compile the application"
+    echo "  qemu                Run QEMU with the built in RFS"
   ;;
 esac
 
