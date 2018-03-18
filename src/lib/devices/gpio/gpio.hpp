@@ -5,25 +5,27 @@
 
 class GPIO : public Device
 {
-  enum Direction
-  {
-    IN,
-    OUT
-  };
-
   public:
+    enum Direction
+    {
+      IN,
+      OUT
+    };
+
     GPIO( const int id, const int port );
+    GPIO( const int port );
 
     int port() const;
 
     int value() const;
-    void setValue( const int status );
+    int setValue( const int status );
 
     Direction direction() const;
-    void setDirection( const Direction direction );
+    int setDirection( const Direction direction );
 
   private:
     bool _valid;
+    std::string _path;
     const int _port;
 };
 

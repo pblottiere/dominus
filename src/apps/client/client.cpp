@@ -11,9 +11,9 @@ void usage()
   std::cout << std::endl;
   std::cout << "Options:" << std::endl;
   std::cout << std::endl;
-  std::cout << "  -i=192.168.1.30       IP of Dominus Server" << std::endl;
-  std::cout << "  -p=8081               Port of Dominus Server" << std::endl;
-  std::cout << "  -c=\"GPIO:12:1\"        Command to execute" << std::endl;
+  std::cout << "  -i 192.168.1.30       IP of Dominus Server" << std::endl;
+  std::cout << "  -p 8081               Port of Dominus Server" << std::endl;
+  std::cout << "  -c \"GPIO:12:1\"        Command to execute" << std::endl;
   std::cout << "  -h                    Help" << std::endl;
 }
 
@@ -21,10 +21,11 @@ int main( int argc, char * argv[] )
 {
   std::string host;
   std::string command;
+  bool done = false;
   int port = -1;
   char c;
 
-  while( ( c = getopt (argc, argv, "i:p:c:h") ) != -1 )
+  while( !done && ( c = getopt (argc, argv, "i:p:c:h") ) != -1 )
   {
     switch(c)
     {
@@ -48,8 +49,8 @@ int main( int argc, char * argv[] )
         return EXIT_SUCCESS;
 
       default:
-        std::cerr << "Invalid usage. See -h for help." << std::endl;
-        return EXIT_FAILURE;
+        done = true;
+        break;
     }
   }
 

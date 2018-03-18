@@ -2,10 +2,13 @@
 #include <devices/bme280/bme280.hpp>
 #include <devices/device/config.hpp>
 #include <net/server.hpp>
+#include <devices/gpio/gpio.hpp>
 #include <logger/logger.hpp>
 
 #include <unistd.h>
 #include <iostream>
+#include <vector>
+#include <sstream>
 
 void usage()
 {
@@ -76,7 +79,30 @@ int main( int argc, char * argv[] )
     {
       if ( ! command.empty() )
       {
-        std::cout << "COMMAND: " << command << std::endl;
+        Logger::debug("[dominus-server] A command has been received: " + command);
+        std::vector<std::string> parts;
+        std::string part;
+        std::istringstream f(command);
+        while (std::getline(f, part, ':'))
+        {
+          parts.push_back(part);
+        }
+
+        if ( parts.size() != 3 )
+        {
+          Logger::debug("[dominus-server] Command ignored.");
+          break;
+        }
+
+        if ( parts[0] == "GPIO" )
+        {
+          const int pin = std::stoi( parts[1] );
+          const int value = std::stoi( parts[2] );
+
+          GPIO gpio( -1, pin );
+          gpio.setDirection( GPIO::Direction::OUT );
+          gpio.setValue( value );
+        }
       }
       else
       {

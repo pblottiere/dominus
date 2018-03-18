@@ -20,6 +20,14 @@ Server::Server( const int port )
     Logger::debug( "[server]   - port: " + std::to_string( port ) );
 }
 
+Server::~Server()
+{
+    if ( _socket >= 0 )
+    {
+        close(_socket);
+    }
+}
+
 bool Server::bind()
 {
     if ((_socket = socket(AF_INET, SOCK_STREAM, 0)) == -1)

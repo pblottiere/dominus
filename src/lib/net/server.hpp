@@ -8,6 +8,7 @@ class Server
 {
     public:
         Server( const int port );
+        ~Server();
 
         bool bind();
 
