@@ -1,0 +1,21 @@
+--- linux-orange-pi-4.9.orig/arch/arm/boot/dts/sun8i-h3-nanopi-neo.dts	2016-11-10 16:57:32.000000000 +0100
++++ linux-orange-pi-4.9/arch/arm/boot/dts/sun8i-h3-nanopi-neo.dts	2016-11-11 11:08:01.142282116 +0100
+@@ -53,6 +53,7 @@
+ 
+ 	aliases {
+ 		serial0 = &uart0;
++		ethernet0 = &emac;
+ 	};
+ 
+ 	chosen {
+@@ -123,3 +124,10 @@
+ 	/* USB VBUS is always on */
+ 	status = "okay";
+ };
++
++&emac {
++	phy-handle = <&int_mii_phy>;
++	phy-mode = "mii";
++	allwinner,leds-active-low;
++	status = "okay";
++};
