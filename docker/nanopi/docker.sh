@@ -47,7 +47,7 @@ case "$1" in
     docker run --rm --privileged -v $PWD/../..:/src -w /src -it $(id) /bin/bash -c "$QEMU_CMD"
   ;;
 
-  maintainer-clean)
+  clean)
     docker run --rm -v $PWD/../..:/src -w /src -it $(id) make maintainer-clean
   ;;
 
@@ -55,7 +55,7 @@ case "$1" in
     docker run --rm -v $PWD/../..:/src -w /src -it $(id) /bin/bash
   ;;
 
-  clean)
+  rm)
     docker rmi $(id)
   ;;
 
@@ -66,11 +66,11 @@ case "$1" in
     echo ""
     echo "  img                 Copy the sdcard image from the container to the host"
     echo "  build               Build the BSP in a Docker image"
-    echo "  clean               Remove the underlying Docker image"
+    echo "  rm                  Remove the underlying Docker image"
     echo "  connect             Create an interactive bash within a Docker container"
     echo "  configure           Run the configure script using the cross-compiler"
     echo "  install             Install cross-compiled application in a sub-directory"
-    echo "  maintainer-clean    Clean generated files"
+    echo "  clean               Clean generated files"
     echo "  make                Cross-compile the application"
     echo "  qemu                Run QEMU with the built in RFS"
   ;;

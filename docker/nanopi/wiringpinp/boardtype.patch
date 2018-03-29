@@ -1,0 +1,16 @@
+--- a/wiringPi/boardtype_friendlyelec.c	2018-03-28 20:05:46.035107508 +0000
++++ b/wiringPi/boardtype_friendlyelec.c	2018-03-28 20:08:16.374987554 +0000
+@@ -215,7 +215,12 @@
+     // h3 and h5, check hardware and boardid
+ 	if (strncasecmp(hardware, h3, strlen(h3)) == 0 || strncasecmp(hardware, h5, strlen(h5)) == 0
+ 		|| strncasecmp(hardware, h3_kernel4, strlen(h3_kernel4)) == 0 || strncasecmp(hardware, h5_kernel4, strlen(h5_kernel4)) == 0) {
+-		int ret = getAllwinnerBoardID(allwinnerBoardID, sizeof(allwinnerBoardID));
++		//int ret = getAllwinnerBoardID(allwinnerBoardID, sizeof(allwinnerBoardID));
++		int ret = 0;
++		allwinnerBoardID[0] = '1';
++		allwinnerBoardID[1] = '(';
++		allwinnerBoardID[2] = '0';
++		allwinnerBoardID[3] = ')';
+ 		if (ret == 0) {
+ 			//LOGD("got boardid: %s\n", allwinnerBoardID);
+ 			for (i=0; i<(sizeof(gAllBoardHardwareInfo)/sizeof(BoardHardwareInfo)); i++) {

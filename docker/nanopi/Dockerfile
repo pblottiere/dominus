@@ -37,6 +37,12 @@ COPY patches/v4-01-10-ethernet-add-sun8i-emac-driver.patch patches/linux/
 COPY patches/v4-04-10-ARM-dts-sun8i-h3-Add-dt-node-for-the-syscon-control-module.patch patches/linux/
 COPY patches/v4-05-10-ARM-dts-sun8i-h3-add-sun8i-emac-ethernet-driver.patch patches/linux/
 
+COPY wiringpinp /root/buildroot-2017.11.2/package/wiringpinp
+RUN echo "menu \"Custom packages\"" >> /root/buildroot-2017.11.2/package/Config.in
+RUN echo "source \"package/wiringpinp/Config.in\"" >> /root/buildroot-2017.11.2/package/Config.in
+RUN echo "endmenu" >> /root/buildroot-2017.11.2/package/Config.in
+RUN cat /root/buildroot-2017.11.2/package/Config.in
+
 COPY users.tables /root/buildroot-2017.11.2/users.tables
 COPY defconfig /root/buildroot-2017.11.2/configs/dominus_defconfig
 COPY linux_defconfig /root/buildroot-2017.11.2/dominus_linux_defconfig

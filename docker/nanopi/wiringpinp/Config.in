@@ -1,0 +1,5 @@
+config BR2_PACKAGE_WIRINGPINP
+    bool "wiringpinp"
+    help
+      WiringPi for NanoPi
+      see http://wiki.friendlyarm.com/wiki/index.php/WiringNP:_NanoPi_NEO/NEO2/Air_GPIO_Programming_with_C

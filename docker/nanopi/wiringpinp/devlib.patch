@@ -1,0 +1,41 @@
+--- 0/devLib/Makefile	2018-03-25 12:59:44.061632299 +0000
++++ 1/devLib/Makefile	2018-03-25 13:31:18.446438882 +0000
+@@ -24,15 +24,15 @@
+ DYN_VERS_MIN=0
+ 
+ VERSION=$(DYN_VERS_MAJ).$(DYN_VERS_MIN)
+-DESTDIR=/usr
+-PREFIX=/local
++#DESTDIR=/usr
++#PREFIX=/local
+ 
+ STATIC=libwiringPiDev.a
+ DYNAMIC=libwiringPiDev.so.$(VERSION)
+ 
+ #DEBUG	= -g -O0
+ DEBUG	= -O2
+-CC	= gcc
++#CC	= gcc
+ INCLUDE	= -I.
+ CFLAGS	= $(DEBUG) -Wformat=2 -Wall $(INCLUDE) -Winline -pipe -fPIC
+ 
+@@ -94,8 +94,8 @@
+ 	@echo "[Install Dynamic Lib]"
+ 	@install -m 0755 -d						$(DESTDIR)$(PREFIX)/lib
+ 	@install -m 0755 libwiringPiDev.so.$(VERSION)			$(DESTDIR)$(PREFIX)/lib/libwiringPiDev.so.$(VERSION)
+-	@ln -sf $(DESTDIR)$(PREFIX)/lib/libwiringPiDev.so.$(VERSION)	$(DESTDIR)/lib/libwiringPiDev.so
+-	@ldconfig
++	@ln -sf $(DESTDIR)$(PREFIX)/lib/libwiringPiDev.so.$(VERSION)	$(DESTDIR)$(PREFIX)/lib/libwiringPiDev.so
++	@ldconfig $(DESTDIR)$(PREFIX)/lib/
+ 
+ .PHONEY:	install-static
+ install-static:	$(STATIC) install-headers
+@@ -115,7 +115,7 @@
+ 	@rm -f $(DESTDIR)$(PREFIX)/include/lcd.h
+ 	@rm -f $(DESTDIR)$(PREFIX)/include/piGlow.h
+ 	@rm -f $(DESTDIR)$(PREFIX)/lib/libwiringPiDev.*
+-	@ldconfig
++	@ldconfig $(DESTDIR)$(PREFIX)/lib/
+ 
+ 
+ .PHONEY:	depend

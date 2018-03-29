@@ -1,0 +1,33 @@
+--- 0/gpio/Makefile	2018-03-25 12:59:44.065632298 +0000
++++ 1/gpio/Makefile	2018-03-25 13:34:42.730629766 +0000
+@@ -23,12 +23,12 @@
+ #    along with wiringPi.  If not, see <http://www.gnu.org/licenses/>.
+ #################################################################################
+ 
+-DESTDIR=/usr
+-PREFIX=/local
++#DESTDIR=/usr
++#PREFIX=/local
+ 
+ #DEBUG	= -g -O0
+ DEBUG	= -O2
+-CC	= gcc
++#CC	= gcc
+ INCLUDE	= -I$(DESTDIR)$(PREFIX)/include
+ CFLAGS	= $(DEBUG) -Wall $(INCLUDE) -Winline -pipe
+ 
+@@ -65,11 +65,11 @@
+ .PHONY:	install
+ install:
+ 	@echo "[Install]"
+-	@cp gpio		$(DESTDIR)$(PREFIX)/bin
++	@cp gpio		$(DESTDIR)$(PREFIX)/bin/
+ 	@chown root.root	$(DESTDIR)$(PREFIX)/bin/gpio
+ 	@chmod 4755		$(DESTDIR)$(PREFIX)/bin/gpio
+-	@mkdir -p		$(DESTDIR)$(PREFIX)/man/man1
+-	@cp gpio.1		$(DESTDIR)$(PREFIX)/man/man1
++#	@mkdir -p		$(DESTDIR)$(PREFIX)/man/man1
++#	@cp gpio.1		$(DESTDIR)$(PREFIX)/man/man1
+ 
+ .PHONY:	uninstall
+ uninstall:
