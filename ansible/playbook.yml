@@ -58,6 +58,7 @@
         - libdomoticz
         - liblogger
         - libnet
+        - libdht11
 
     - name: Update ldconfig for dominus libs
       local_action: >
