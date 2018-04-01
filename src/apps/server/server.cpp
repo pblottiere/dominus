@@ -1,5 +1,6 @@
 #include <domoticz/domoticz.hpp>
 #include <devices/bme280/bme280.hpp>
+#include <devices/dht11/dht11.hpp>
 #include <devices/device/config.hpp>
 #include <net/server.hpp>
 #include <devices/gpio/gpio.hpp>
@@ -111,13 +112,28 @@ int main( int argc, char * argv[] )
           switch( (*it)->type() )
           {
             case Device::BME280:
-              BME280 *bme280 = dynamic_cast<BME280 *>(*it);
-              Data::THP thp;
-
-              if ( ! bme280->get( thp ) )
               {
-                domo.update_temp_hum( bme280->id(), thp.temperature, thp.humidity );
+                BME280 *bme280 = dynamic_cast<BME280 *>(*it);
+                Data::THP thp;
+
+                if ( ! bme280->get( thp ) )
+                {
+                  domo.update_temp_hum( bme280->id(), thp.temperature, thp.humidity );
+                }
+                break;
               }
+            case Device::DHT11:
+              {
+                DHT11 *dht11 = dynamic_cast<DHT11 *>(*it);
+                Data::TH th;
+
+                if ( ! dht11->get( th ) )
+                {
+                  domo.update_temp_hum( dht11->id(), th.temperature, th.humidity );
+                }
+                break;
+              }
+            default:
               break;
           }
         }

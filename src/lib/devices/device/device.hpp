@@ -10,6 +10,7 @@ class Device
     {
       BME280 = 0,
       GPIO = 1,
+      DHT11 = 2,
       UNKNOWN = 50
     };
 
@@ -22,7 +23,7 @@ class Device
 
   protected:
     const int _id;
-    const Type _type;
+    Type _type;
 };
 
 #endif

@@ -23,6 +23,20 @@ AC_CHECK_HEADER(curl/curl.h, [],
 AC_CHECK_HEADERS(libconfig.h++, [],
                  [AC_MSG_ERROR(["Couldn't find libconfig.h++"])])
 
+# wiringpi option
+AC_ARG_ENABLE([wiringpi],
+              [AS_HELP_STRING([--enable-wiringpi],
+              [Enable wiringpi support for GPIO instead of SYSFS only])])
+
+AS_IF([test "x$enable_wiringpi" = "xyes"],
+      [AC_DEFINE([WIRINGPI], [1], [""])])
+
+AM_CONDITIONAL([WIRINGPI], [test "x$enable_wiringpi" = "xyes"])
+
+AS_IF([test "x$enable_wiringpi" = "xyes"],
+      [AC_CHECK_HEADERS(wiringPi.h, [], [AC_MSG_ERROR(["Couldn't find wiringPi.h"])])
+])
+
 # output files
 AC_CONFIG_FILES([Makefile
                  scripts/Makefile
@@ -34,6 +48,7 @@ AC_CONFIG_FILES([Makefile
                  src/lib/devices/Makefile
                  src/lib/devices/device/Makefile
                  src/lib/devices/bme280/Makefile
+                 src/lib/devices/dht11/Makefile
                  src/lib/devices/gpio/Makefile
                  src/apps/Makefile
                  src/apps/server/Makefile

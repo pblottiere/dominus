@@ -1,5 +1,5 @@
 MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure COPYING \
-		       INSTALL config.h.in
+		       INSTALL config.h.in config.h.in~
 
 ACLOCAL_AMFLAGS = -I m4
 
