@@ -32,7 +32,7 @@ case "$1" in
 
   configure)
     docker run --rm -v $PWD/../..:/src -w /src -it $(id) ./autogen.sh
-    docker run --rm -v $PWD/../..:/src -w /src -it $(id) ./configure --host=arm-linux --prefix=/src/install
+    docker run --rm -v $PWD/../..:/src -w /src -it $(id) ./configure --host=arm-linux --prefix=/src/install --enable-wiringpi
   ;;
 
   make)
