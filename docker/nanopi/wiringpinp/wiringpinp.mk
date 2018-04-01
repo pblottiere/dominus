@@ -7,6 +7,8 @@ define WIRINGPINP_BUILD_CMDS
 	cd wiringPi; \
 	$(TARGET_MAKE_ENV) CC=arm-linux-gcc $(MAKE); \
 	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) PREFIX=/usr install; \
+	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(STAGING_DIR) PREFIX=/usr install; \
+	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(STAGING_DIR) PREFIX=/usr install-headers; \
 	cd ../devLib; \
 	$(TARGET_MAKE_ENV) CC=arm-linux-gcc CPATH=../wiringPi $(MAKE); \
 	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) PREFIX=/usr install; \
