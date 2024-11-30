@@ -1,0 +1,61 @@
+#!/usr/bin/python3
+# coding: utf-8
+
+import os
+import re
+import subprocess
+
+IMAGE="stormm-solar-image-raspberrypi4-64.rpi-sdimg"
+
+
+def fdisk(image=IMAGE):
+
+    #  `image`, a .img disk image:
+    cmd = str('fdisk -l ' + image)
+
+    # read fdisk output- everything `cmd` would otherwise print to your console on stdout
+    # is instead piped into `proc`.
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+
+    # the raw stuff from stdout is not parseable as is, so we read into a string:
+    result = proc.stdout.read().__str__()
+
+    # figure out what type we should iterate with when looking via file / part contained within image.  I have no idea if anything besides .img will work- YMMV, but YOLO xD
+    if '.iso' in result:
+        iter = '.iso'
+    if '.qcow2' in result:
+        iter = '.qcow2'
+    else:
+        iter = '.img'
+
+    # chop up fdisk results by file / partition-
+    # the resulting `parts` are equivalent to fdisk "rows" in the shell
+    parts = re.findall(r'' + iter + r'\d', result)
+
+    # dictionary `disk` contains each "row" from `parts`:
+    disk = {}
+    for p in parts:
+        # sub dictionary 'part' contains the handy fdisk output values:
+        part = {}
+        # get just the number words with regex sauce:
+        line = result.split(p)[1]
+        words = re.split(r'\s+', line)
+        # place each word into 'part':
+        part['Start'] = words[2]
+        # stick this part into 'disk', move onto next disk part:
+        disk[p] = part
+    return disk
+
+
+start = int(fdisk()['dimg1']['Start'])
+offset = start * 512
+
+cmd = f"mount -o ro,loop,offset={offset} -t vfat {IMAGE} ./mnt"
+
+try:
+    os.mkdir("mnt")
+except:
+    pass
+
+os.system("umount ./mnt")
+os.system(cmd)
