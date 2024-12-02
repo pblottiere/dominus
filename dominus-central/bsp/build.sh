@@ -32,7 +32,7 @@ docker cp scripts/build.sh $CONTAINER:$WORKDIR/
 docker exec -u $USER -it $CONTAINER sh $WORKDIR/build.sh
 
 # copy image
-docker cp -L $CONTAINER:$WORKDIR/poky/build/tmp/deploy/images/raspberrypi4-64/dominus-image-raspberrypi4-64.rpi-sdimg dominus.sdimg
+docker cp -L $CONTAINER:$WORKDIR/poky/build/tmp/deploy/images/raspberrypi3-64/dominus-image-raspberrypi3-64.rpi-sdimg dominus.sdimg
 
 # stop
 # docker stop $CONTAINER

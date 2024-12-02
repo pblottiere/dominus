@@ -1,4 +1,5 @@
 #include <ELECHOUSE_CC1101.h>
+
 int received_number = 0;
 // int LED = 3;
 
@@ -17,7 +18,7 @@ void loop()
 {
   if(ELECHOUSE_cc1101.CheckReceiveFlag())
   {
-    size=ELECHOUSE_cc1101.ReceiveData(RX_buffer);
+    size = ELECHOUSE_cc1101.ReceiveData(RX_buffer);
     for(int i=0; i<size; i++)
     {
       received_number = RX_buffer[i];

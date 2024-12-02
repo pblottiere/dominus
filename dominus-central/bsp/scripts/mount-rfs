@@ -5,7 +5,7 @@ import os
 import re
 import subprocess
 
-IMAGE="stormm-solar-image-raspberrypi4-64.rpi-sdimg"
+IMAGE="dominus.sdimg"
 
 
 def fdisk(image=IMAGE):
