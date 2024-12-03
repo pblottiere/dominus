@@ -1,0 +1,11 @@
+[Unit]
+Description=Dominus daemon
+
+[Service]
+ExecStart=/bin/sh -c '/usr/bin/dominusd.py >> /dominusd.log 2>&1'
+RestartSec=2
+Restart=always
+StartLimitInterval=0
+
+[Install]
+WantedBy=multi-user.target

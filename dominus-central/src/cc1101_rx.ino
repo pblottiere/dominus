@@ -6,6 +6,7 @@ int received_number = 0;
  void setup()
 {
   // pinMode(LED, OUTPUT);
+  pinMode(4, OUTPUT);
   Serial.begin(9600);
   ELECHOUSE_cc1101.Init();
   ELECHOUSE_cc1101.SetReceive();
@@ -23,6 +24,10 @@ void loop()
     {
       received_number = RX_buffer[i];
       Serial.println(received_number);
+      digitalWrite(4, HIGH); // sets the digital pin 13 on
+      delay(3000);            // waits for a second
+      digitalWrite(4, LOW);  // sets the digital pin 13 off
+      delay(3000);            // waits for a second
     }
     // analogWrite(LED,received_number);
     ELECHOUSE_cc1101.SetReceive();

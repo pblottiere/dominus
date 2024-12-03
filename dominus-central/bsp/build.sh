@@ -26,6 +26,7 @@ docker cp conf/bblayers.conf $CONTAINER:$WORKDIR/poky/build/conf/
 
 # copy stormm-solar layer
 docker cp meta-dominus $CONTAINER:$WORKDIR/poky/
+docker cp ../src/dominusd.py $CONTAINER:$WORKDIR/poky/meta-dominus/recipes-dominus/dominusd/files/
 
 # build
 docker cp scripts/build.sh $CONTAINER:$WORKDIR/
